@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title> git学习笔记1 —  &raquo;  一亩田</title>
+<meta name="description" content="Chengdu.Shanghai. Nijmegen psychology.guitar.programming beginner
+">
+<meta name="keywords" content="">
+<link rel="canonical" href="http://blog.mashuangpsy.com/tech/2015/12/30/learner-git-note.html">
+        
+
+
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="git学习笔记1" />
+<meta name="twitter:description" content="Chengdu.Shanghai. Nijmegen psychology.guitar.programming beginner
+" />
+<meta name="twitter:image" content="http://blog.mashuangpsy.com" />
+
+<!-- Google plus -->
+<meta name="author" content="https://www.google.com/+MotaquillahMaddane">
+<link rel="author" href="https://www.google.com/+MotaquillahMaddane">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="git学习笔记1">
+<meta property="og:description" content="Chengdu.Shanghai. Nijmegen psychology.guitar.programming beginner
+">
+<meta property="og:url" content="http://blog.mashuangpsy.com/tech/2015/12/30/learner-git-note.html">
+<meta property="og:site_name" content="一亩田">
+
+        <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/assets/vendor/normalize-css/normalize.css">
+<link rel="stylesheet" href="/css/main.css">
+<link rel="stylesheet" href="/assets/vendor/highlight/styles/solarized_dark.css">
+<link rel="stylesheet" href="/assets/vendor/font-awesome/css/font-awesome.css">
+    </head>
+
+    <body>
+
+
+        <div class="wrapper">
+            <header class="header">
+    <div class="navigation">
+        <a href="/" class="logo">一亩田</a>
+
+        <ul class="menu">
+            <li class="menu__entry"><a href="/about">About</a></li>
+            <li class="menu__entry"><a href="/">Blog</a></li>
+        </ul>
+    </div>
+
+    <!-- <ul class="social-links">
+        
+            <a href="https://github.com/ShuangFarmer" class="social-links__entry" target="_blank">
+                <i class="fa fa-github"></i>
+            </a>
+        
+
+        
+            <a href="https://twitter.com/ShuangFarmer" class="social-links__entry" target="_blank">
+                <i class="fa fa-twitter"></i>
+            </a>
+        
+    </ul> -->
+</header>
+
+            <h1 class="page-title post-title">
+    <div class="page-title__text post-title__text">git学习笔记1</div>
+    <div class="page-title__subtitle post-title__subtitle"></div>
+</h1>
+
+<div class="content">
+    <p>研究报告、论文、代码，都是需要长线发展，一点点更新、修改、打磨的项目，无法一夜之间大笔一挥，一蹴而就。为求稳妥，每做一点修改，都会把文件另存为，取名为ver1、ver2、ver3、ver4…, 把它跟旧版本区分开来。这样一来，一篇报告，一个程序，往往有N个不同的版本。时间长了，根本不知道每个版本都有哪些改动。而某个版本出现了bug，想要回看历史版本，也不知该从何看起。版本管理系统就是为了应对这样的需求而设计。版本管理，顾名思义，管理的是文件的各个历史版本。有了它，可以很方便地回看、储存和编辑同一个文件的历史版本。甚至，论文、程序写坏了都不要紧，还原到之前的稳妥版本就行。下面提到的git就是这样一个版本管理系统。</p>
+
+<p>###git系统简介<br />
+git是一个分布式版本管理系统。<strong>分布式</strong>是相对<strong>集中式</strong>而言的。一个集中式的管理系统，文件的历史版本全部存在中央服务器中。需要从中央服务器下载先需要修改的文件，进行修改。而每做一次修改，又需要将修改的文件上传到中央服务器。集中式管理系统使用起来并不方便也不安全，因为它必须联网才能工作，而要是中央服务器坏了，所有的历史记录都没了。而分布式系统的优势在于，它没有中央服务器，每个用户的电脑里都保存着完整的文件历史版本的记录，完全可以离线操作。用户之间可以相互分享文件的历史记录。如果某个人的电脑坏了，历史记录没了，从其他人的电脑上把历史记录拷贝过来就行。</p>
+
+<p>###git工作方式<br />
+想保存某一版本的文件，用git给这个版本拍张‘快照’，生成一个commit。git会储存这些快照，想回到过去的文件版本，访问该版本的commit ID即可。而何时拍张快照、建立commit完全取决于使用者本人。一般来说，每个logical change对应一个commit。</p>
+
+<p>如何建立commit，给当前的文件‘咔嚓’拍张快照呢？这需要了解git的三个区域:</p>
+
+<ul>
+  <li>
+    <p>工作区（working directory）<br />
+存放正在编辑修改的文件</p>
+  </li>
+  <li>
+    <p>暂存间（stage/index）<br />
+类似于缓存空间，修改好的文件，一开始需要提交至暂存区</p>
+  </li>
+  <li>
+    <p>HEAD <br />
+最终，commit（快照）将保存在这里</p>
+  </li>
+</ul>
+
+<p>因此，建立commit分两步走：</p>
+
+<ol>
+  <li>
+    <p>将工作间里需要commit的文件，添加到暂存区</p>
+  </li>
+  <li>
+    <p>将暂存区的文件提交至HEAD</p>
+  </li>
+</ol>
+
+<p>###git入门操作</p>
+
+<p>####安装<br />
+登陆<a href="http://git-scm.com/downloads">git下载页面</a>, 下载安装。安装好后，在terminal中输入：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git --version  
+</code></pre>
+</div>
+
+<p>如果terminal给出git的版本号，如：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>git version 2.6.3  
+</code></pre>
+</div>
+
+<p>则安装成功.</p>
+
+<p>####建立git仓库<br />
+存放文件的文件夹，在git里叫做仓库（repositary）。仓库可以是已经建立好的文件夹，也可以新建。版本管理的第一步，是初始化仓库。将工作路径设置为需要版本管理的某文件夹的路径，在terminal输入：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git init  
+</code></pre>
+</div>
+
+<p>terminal会显示：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>Initialized empty Git repository in /Users/shuang/introgit/.git/
+</code></pre>
+</div>
+
+<p>一个仓库就建好了 ：）</p>
+
+<p>####添加文件到暂存区<br />
+将文件添加至暂存区，使用指令<code class="highlighter-rouge">git add</code>加上需要添加的文件名，如：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git add readme.txt
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">git add</code>一次只能添加一个文件。想要一次性添加文件夹内（仓库内）的所有文件，可以输入：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git add .
+</code></pre>
+</div>
+
+<p>这时，可以使用指令<code class="highlighter-rouge">git status</code>，查看当前git状态：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git status  
+</code></pre>
+</div>
+
+<p>将得到如下信息：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached &lt;file&gt;..." to unstage)
+
+new file:   readme.txt
+</code></pre>
+</div>
+
+<p>on branch master，意思为在master分支 （目前可先不理会分支）。initial commit，表明这是初次提交的commit。changes to be commited表示新文件readme.txt已经放到了暂存区，可以commit到HEAD了。</p>
+
+<p>####提交文件至HEAD<br />
+使用<code class="highlighter-rouge">git commit -m "commit message"</code>，将暂存区中的文件，提交至HEAD。在<code class="highlighter-rouge">-m</code>后面，添加该次commit的备注，说明此次commit做了何种改动。<code class="highlighter-rouge">git commit</code>可以一次性将暂存区中的多个文件，一并提交。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git commit -m "Add readme.txt file"
+[master (root-commit) 78122e2] Add readme file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 readme.txt
+</code></pre>
+</div>
+
+<p>命令执行成功后，会告知一个文件有改动，有1行添加的内容。</p>
+
+<p>这时输入<code class="highlighter-rouge">git status</code>查看git状态，会得到：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git status
+On branch master
+nothing to commit, working directory clean
+</code></pre>
+</div>
+
+<p>这时，工作区的文件没有改动。暂存区的文件，在上一次commit之后已经清空。因此，当前的状态是没啥可commit（nothing to commit）。</p>
+
+<p>####查看commit历史记录<br />
+可以使用<code class="highlighter-rouge">git log</code>查看commit的记录。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git log
+commit b8b0082e51f2afdf1c1f8b9ba44023d68a9fd6a8
+Author: 
+Date:   Wed Dec 30 18:01:14 2015 +0100
+
+Add game file
+
+commit 78122e28a7dd941711d8c34b57ca8c9de1b128dd
+Author: 
+Date:   Wed Dec 30 17:46:29 2015 +0100
+
+Add readme file
+</code></pre>
+</div>
+
+<p>历史记录是按照时间顺序由新到旧排列。commit后面的一系列字符串，即是每个commit的ID，可以根据ID，回访文件的历史版本。Author一栏会给出每次commit的作者信息，这在多人协作的项目中比较有用。该指令也会显示每个commit的备注信息，每个commit到底做了什么改动，一目了然（前提是最初设置的备注信息要清晰明白）。</p>
+
+<p>####比较不同版本的文件<br />
+版本多了，我们可能需要了解两个版本之间到底有哪些差异，这时需要用到<code class="highlighter-rouge">git diff commit_id1 commit_id2</code>。<code class="highlighter-rouge">git diff</code>会比较commit_id2比commit_id1增加了或减少了哪些内容。如果想要比较新版本较之于旧版本做了哪些改动，commit_id1写较旧那个版本的commit id。</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git diff b8b0082e51f2afdf1c1f8b9ba44023d68a9fd6a8  6e088c0c257b1322f89c2f17af789b2a960bd961
+diff --git a/game.py b/game.py
+index 7f5651b..83c850b 100644
+--- a/game.py
++++ b/game.py
+@@ -1,2 +1,6 @@
+ #print hello world
+-#this is an introductional file
+\ No newline at end of file
++#this is an introduction file
++
++i = 0
++for i in range(4):
++ print i + 1
+\ No newline at end of file
+</code></pre>
+</div>
+
+<p><strong>+</strong>表示新版本较旧版本增加的内容<br />
+<strong>-</strong> 表示新版本较旧版本删除的内容</p>
+
+<p>####回到历史版本
+输入指令<code class="highlighter-rouge">git checkout</code>加上commit id，就能回到该版本：</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>$ git checkout 78122e28a7dd941711d8c34b57ca8c9de1b128dd
+Note: checking out '78122e28a7dd941711d8c34b57ca8c9de1b128dd'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by performing another checkout.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -b with the checkout command again. Example:
+
+  git checkout -b &lt;new-branch-name&gt;
+
+HEAD is now at 78122e2... Add readme file
+</code></pre>
+</div>
+
+<p>这时回到仓库，打开文件，会发现它已经回到了历史版本 ：） <br />
+git会吐出一堆内容，涉及到分支的知识，先暂时不管它啦。</p>
+
+<p>拥有这些知识，就已经可以着手管理自己的文件啦！</p>
+
+<p>###参考资料：<br />
+Udacity课程: <a href="https://www.udacity.com/course/how-to-use-git-and-github--ud775">How to use Git and Github</a></p>
+
+<p>廖雪峰的<a href="http://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000">git教程</a></p>
+
+
+    <div id="disqus_thread"></div>
+<script>
+
+/**
+ *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+ *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables */
+/*
+var disqus_config = function () {
+    this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
+    this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+*/
+(function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = '//http-blog-mashuangpsy-com.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-81614549-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</div>
+
+<div class="about">
+    <div class="about__devider"></div>
+    <div class="about__text">
+        Blog theme: <a href='https://github.com/kronik3r/daktilo'><strong>  jekyll + daktilo </a></strong>
+        <!-- on <strong>30 December 2015</strong> -->
+    </div>
+</div>
+
+
+                                    
+
+        </div>
+
+
+        <script src="/assets/vendor/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+        
+        
+    </body>
+</html>
